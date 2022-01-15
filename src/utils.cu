@@ -8,8 +8,8 @@ void parse_arguments(int argc, char** argv, int* n, int* k, int* mode, int *b)
     *n = 100;    // the dimension of matrix
     *k = 100;    // the number of iterations
     *mode = 0;   // 0:sequential 0, 1:cuda 1 point per thread, 2:..., 3:...
-    *b = 0;      // block size
-    if(argc < 5)
+    *b = 1;      // block size
+    if(argc < 4)
     {
         printf("Usage: `./main_program n k mode b` where n is the number of matrix's dimentionm, k the iterations of model \n \
         and mode: 0 : sequential, 1 : cuda 1 point per thread ... and b is the block size of cuda v2 and v3 implementations\n");
@@ -20,7 +20,8 @@ void parse_arguments(int argc, char** argv, int* n, int* k, int* mode, int *b)
         *n = atoi(argv[1]);
         *k = atoi(argv[2]);
         *mode = atoi(argv[3]);
-        *b = atoi(argv[4]);
+        if(*mode > 1 && argc == 5 )
+            *b = atoi(argv[4]);
         printf("Mode: %d / matrix dimensions: %d / number of iterations: %d / b: %d\n", *mode, *n, *k, *b);
     }
 }
@@ -111,7 +112,6 @@ void save_res(int mode, int n, int k, int b, double process_time, double total_t
     int file_exists;
     if( access("results.txt", F_OK ) == 0 )
         file_exists = 1;
-
     fp = fopen("results.txt", "a+");
     if(file_exists!=1)
         fprintf(fp, "mode, n, k, b, process_time, total_time\n", mode, n, k, b, process_time, total_time);

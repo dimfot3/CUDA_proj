@@ -9,7 +9,6 @@
 #include <cuda_prog_m1.h>
 #include <cuda_prog_m1_share.h>
 
-
 int main(int argc, char** argv)
 {
     srand(time(NULL));
