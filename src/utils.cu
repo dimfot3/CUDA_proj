@@ -98,3 +98,7 @@ int compare_matrices(int* arr1, int* arr2, int n)
     return valid;
 }
 
+int get_max_com_div(int a, int max_num)
+{
+    return max_num == 0 ? a : get_max_com_div(max_num, a % max_num);   
+}

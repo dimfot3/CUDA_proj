@@ -6,8 +6,8 @@
 
 __global__ void kernel11(int* arr, int* temp, int n)
 {
-    int i = blockIdx.x;
-    int j = threadIdx.x;
+    int i = (blockIdx.x * blockDim.x + threadIdx.x) / n;
+    int j = (blockIdx.x * blockDim.x + threadIdx.x) % n;
     int u_idx = ((i - 1 + n) % n) * n + j;
     int lo_idx = ((i + 1) % n ) * n + j;
     int lf_idx = n * i + (j - 1 + n) % n;
@@ -23,10 +23,13 @@ int* cuda_implementation_v1(int* arr, int n, int k, double *elapsed)
     cudaMalloc(&d_A, length);
     cudaMalloc(&d_temp, length);
     cudaMemcpy(d_A, arr, length, cudaMemcpyHostToDevice);
+    int num_of_thread_p_block = n <= 1024 ? n : get_max_com_div(n, 1024);
+    dim3 block_dim(num_of_thread_p_block, 1, 1);
+    dim3 grid_dim(n*n/num_of_thread_p_block,1,1); 
     gettimeofday(&t0, 0);
     for(int i = 0; i < k; i++)
     {
-        kernel11<<<n, n>>>(d_A, d_temp, n);
+        kernel11<<<grid_dim, block_dim>>>(d_A, d_temp, n);
         tmp = d_A;
         d_A = d_temp;
         d_temp = tmp;

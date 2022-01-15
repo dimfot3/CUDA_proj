@@ -66,4 +66,13 @@ long get_nsum(int* arr, int n);
  **/
 int compare_matrices(int* arr1, int* arr2, int n);
 
+
+/**
+ * @brief finds the biggest common divisor of a under max_num
+ * 
+ * @param a the number to search the common divisor
+ * @param max_num maximum number of divisor
+ **/
+int get_max_com_div(int a, int max_num);
+
 #endif

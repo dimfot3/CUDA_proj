@@ -4,6 +4,7 @@
 #include <utils.h>
 #include <sequential.h>
 #include <cuda_prog_11.h>
+#include <cuda_prog_m1.h>
 #include <cuda_runtime_api.h> 
 #include <cuda.h> 
 
@@ -17,7 +18,7 @@ int main(int argc, char** argv)
     int* arr = initiallize_model(n);
     //the second copy is used for validation
     int* copy_arr = (int*) malloc(sizeof(int)*n*n);
-    memccpy(copy_arr, arr, n*n, sizeof(int)*n*n);
+    memcpy(copy_arr, arr, n*n*sizeof(int));
     //print_model(n, arr);
     struct timeval t0, t1;
     int validation = 1;
@@ -38,6 +39,13 @@ int main(int argc, char** argv)
             copy_arr = sequential_eval_ver(n, k, copy_arr);
             validation = compare_matrices(arr, copy_arr, n);
             break;
+        case 2:
+            gettimeofday(&t0, 0);
+            cuda_implementation_v2(arr, n, k, &process);
+            gettimeofday(&t1, 0);
+            copy_arr = sequential_eval_ver(n, k, copy_arr);
+            validation = compare_matrices(arr, copy_arr, n);
+            break;
     }
     elapsed = ((t1.tv_sec-t0.tv_sec)*1000000 + t1.tv_usec-t0.tv_usec)/1000.0;
     
@@ -45,7 +53,7 @@ int main(int argc, char** argv)
     
     if(validation == 0)
     {
-        printf("Model evaluated successfully in %.3fms (actual process %.3fms)\n", elapsed, process);
+        printf("Model evaluated successfully in %.3lfms (actual process %.3lfms)\n", elapsed, process);
     }
     else
         printf("ERROR! Model evaluation failed!\n");
