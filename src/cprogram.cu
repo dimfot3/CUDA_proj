@@ -1,19 +1,21 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/time.h>
+#include <cuda_runtime_api.h> 
+#include <cuda.h> 
 #include <utils.h>
 #include <sequential.h>
 #include <cuda_prog_11.h>
 #include <cuda_prog_m1.h>
-#include <cuda_runtime_api.h> 
-#include <cuda.h> 
+#include <cuda_prog_m1_share.h>
+
 
 int main(int argc, char** argv)
 {
     srand(time(NULL));
 
-    int n, k, mode;
-    parse_arguments(argc, argv, &n, &k, &mode);
+    int n, k, mode, b;
+    parse_arguments(argc, argv, &n, &k, &mode, &b);
     
     int* arr = initiallize_model(n);
     //the second copy is used for validation
@@ -41,7 +43,14 @@ int main(int argc, char** argv)
             break;
         case 2:
             gettimeofday(&t0, 0);
-            cuda_implementation_v2(arr, n, k, &process);
+            cuda_implementation_v2(arr, n, k, b, &process);
+            gettimeofday(&t1, 0);
+            copy_arr = sequential_eval_ver(n, k, copy_arr);
+            validation = compare_matrices(arr, copy_arr, n);
+            break;
+        case 3:
+            gettimeofday(&t0, 0);
+            cuda_implementation_v3(arr, n, k, b, &process);
             gettimeofday(&t1, 0);
             copy_arr = sequential_eval_ver(n, k, copy_arr);
             validation = compare_matrices(arr, copy_arr, n);
@@ -52,9 +61,7 @@ int main(int argc, char** argv)
     //print_model(n, arr);
     
     if(validation == 0)
-    {
         printf("Model evaluated successfully in %.3lfms (actual process %.3lfms)\n", elapsed, process);
-    }
     else
         printf("ERROR! Model evaluation failed!\n");
         

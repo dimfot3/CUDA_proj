@@ -3,23 +3,25 @@
 #include <utils.h>
 #include <assert.h>
 
-void parse_arguments(int argc, char** argv, int* n, int* k, int* mode)
+void parse_arguments(int argc, char** argv, int* n, int* k, int* mode, int *b)
 {
-    *n = 100;   //the dimension of matrix
-    *k = 100;    //the number of iterations
+    *n = 100;    // the dimension of matrix
+    *k = 100;    // the number of iterations
     *mode = 0;   // 0:sequential 0, 1:cuda 1 point per thread, 2:..., 3:...
-    if(argc < 4)
+    *b = 0;      // block size
+    if(argc < 5)
     {
-        printf("Usage: `./main_program n k mode` where n is the number of matrix's dimentionm, k the iterations of model \n \
-        and mode: 0 : sequential, 1 : cuda 1 point per thread ...\n");
-        printf("WARNING! You have not given arguments, so default values n=%d and k=%d and mode=%d will be used.\n\n", *n, *k, *mode);
+        printf("Usage: `./main_program n k mode b` where n is the number of matrix's dimentionm, k the iterations of model \n \
+        and mode: 0 : sequential, 1 : cuda 1 point per thread ... and b is the block size of cuda v2 and v3 implementations\n");
+        printf("WARNING! You have not given arguments, so default values n=%d, k=%d, mode=%d and b=%d will be used.\n\n", *n, *k, *mode, *b);
     }   
     else
     {
         *n = atoi(argv[1]);
         *k = atoi(argv[2]);
         *mode = atoi(argv[3]);
-        printf("Mode: %d / matrix dimensions: %d / number of iterations: %d\n", *mode, *n, *k);
+        *b = atoi(argv[4]);
+        printf("Mode: %d / matrix dimensions: %d / number of iterations: %d / b: %d\n", *mode, *n, *k, *b);
     }
 }
 

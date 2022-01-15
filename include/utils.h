@@ -15,9 +15,10 @@
  * @param n here the dimension matrix will be saved
  * @param k here the number of iteration will be saved
  * @param mode here the mode of evaluation will be saved (sequential, cuda1, cuda2...)
+ * @param b the block size for v2 and v3 implementation
  * @return void
  **/
-void parse_arguments(int argc, char** argv, int* n, int* k, int* mode);
+void parse_arguments(int argc, char** argv, int* n, int* k, int* mode, int *b);
 
 
 /**

@@ -19,8 +19,12 @@ add_library(cuda_m1 src/cuda_prog_m1.cu)
 target_link_libraries(cuda_m1 utils)
 target_include_directories(cuda_m1 PUBLIC include)
 
+add_library(cuda_share src/cuda_prog_m1_share.cu)
+target_link_libraries(cuda_share utils)
+target_include_directories(cuda_share PUBLIC include)
+
 add_executable(main_program src/cprogram.cu)
-target_link_libraries(main_program utils seq cuda_11 cuda_m1)  
+target_link_libraries(main_program utils seq cuda_11 cuda_m1 cuda_share)  
 target_include_directories(main_program PUBLIC include)
 
 if(BUILD_TESTING)
