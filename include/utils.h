@@ -76,4 +76,16 @@ int compare_matrices(int* arr1, int* arr2, int n);
  **/
 int get_max_com_div(int a, int max_num);
 
+/**
+ * @brief save the results of this session in csv format
+ * 
+ * @param mode the mode of the session
+ * @param n the matrix dimension
+ * @param k the number of iteration
+ * @param b the block size
+ * @param process_time this is the actual process time without data tasnfers (host-device)
+ * @param total_time this is the actual process time with data tasnfers (host-device)
+ **/
+void save_res(int mode, int n, int k, int b, double process_time, double total_time);
+
 #endif

@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <utils.h>
 #include <assert.h>
-
+#include <unistd.h>
 void parse_arguments(int argc, char** argv, int* n, int* k, int* mode, int *b)
 {
     *n = 100;    // the dimension of matrix
@@ -103,4 +103,18 @@ int compare_matrices(int* arr1, int* arr2, int n)
 int get_max_com_div(int a, int max_num)
 {
     return max_num == 0 ? a : get_max_com_div(max_num, a % max_num);   
+}
+
+void save_res(int mode, int n, int k, int b, double process_time, double total_time)
+{
+    FILE *fp;
+    int file_exists;
+    if( access("results.txt", F_OK ) == 0 )
+        file_exists = 1;
+
+    fp = fopen("results.txt", "a+");
+    if(file_exists!=1)
+        fprintf(fp, "mode, n, k, b, process_time, total_time\n", mode, n, k, b, process_time, total_time);
+    fprintf(fp, "%d,%d,%d,%d,%lf,%lf\n", mode, n, k, b, process_time, total_time);
+    fclose(fp);
 }
