@@ -30,3 +30,5 @@ the actual process execution time and the total time (included memory transfers)
 Here testing is really important as we can make ground truth results for our parallel and complex implementations. We can show the correctness of the program by two ways.
 1.  The analytical expression of ising model is not practical to be used. However one energy therem used as explained in report.
 2.  The second method to increase the trust on code are some Google Tests that test every function used in sequential implementation.
+
+## Intructions for code reviewers
