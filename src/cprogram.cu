@@ -55,17 +55,17 @@ int main(int argc, char** argv)
             validation = compare_matrices(arr, copy_arr, n);
             break;
     }
-    elapsed = ((t1.tv_sec-t0.tv_sec)*1000000 + t1.tv_usec-t0.tv_usec)/1000.0;
+    elapsed = (t1.tv_sec-t0.tv_sec)*1000.0 + (t1.tv_usec-t0.tv_usec)/1000.0;
     
     //print_model(n, arr);
     
     if(validation == 0)
     {
         save_res(mode, n, k, b, process, elapsed);
-        printf("Model evaluated successfully in %.3lfms (actual process %.3lfms)\n", elapsed, process);
+        printf("Model evaluated successfully in %5.3fms (actual process %5.3fms)\n\n", elapsed, process);
     }
     else
-        printf("ERROR! Model evaluation failed!\n");
+        printf("ERROR! Model evaluation failed!\n\n");
     free(arr);
     free(copy_arr);
     return 0;
