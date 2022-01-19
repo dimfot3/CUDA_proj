@@ -62,10 +62,10 @@ int main(int argc, char** argv)
     if(validation == 0)
     {
         save_res(mode, n, k, b, process, elapsed);
-        printf("Model evaluated successfully in %5.3fms (actual process %5.3fms)\n", elapsed, process);
+        printf("Model evaluated successfully in %5.3fms (actual process %5.3fms)\n\n", elapsed, process);
     }
     else
-        printf("ERROR! Model evaluation failed!\n");
+        printf("ERROR! Model evaluation failed!\n\n");
     free(arr);
     free(copy_arr);
     return 0;

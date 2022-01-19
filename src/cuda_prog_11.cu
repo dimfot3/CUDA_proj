@@ -46,6 +46,7 @@ int* cuda_implementation_v1(int* arr, int n, int k, double *elapsed)
         d_A = d_temp;
         d_temp = tmp;
     }
+    cudaThreadSynchronize();
     gettimeofday(&t1, 0);
     *elapsed = (t1.tv_sec-t0.tv_sec)*1000.0 + (t1.tv_usec-t0.tv_usec)/1000.0;
     cudaMemcpy(arr, d_A, length, cudaMemcpyDeviceToHost);

@@ -27,6 +27,11 @@ add_executable(main_program src/cprogram.cu)
 target_link_libraries(main_program utils seq cuda_11 cuda_m1 cuda_share)  
 target_include_directories(main_program PUBLIC include)
 
+file(GLOB SCRIPTS
+  "scripts/*.sh"
+)
+file(COPY ${SCRIPTS} DESTINATION ${CMAKE_BINARY_DIR})
+
 if(BUILD_TESTING)
     enable_testing()
     add_subdirectory(tests)

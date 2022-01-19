@@ -4,7 +4,6 @@
 #include <utils.h>
 #include <cuda_prog_m1.h>
 #define MAX_THREADS_PER_DIM 32
-
 __global__ void kernelm1_v1(int* arr, int* temp, int n, int b)
 {
     int i, j, u_idx, lo_idx, lf_idx, r_idx;
@@ -16,6 +15,7 @@ __global__ void kernelm1_v1(int* arr, int* temp, int n, int b)
         reminders_x = orig_x + b - n;
     if(orig_y + b >= n)
         reminders_y = orig_y + b - n;
+    
     for(int row = 0; row < b - reminders_x ; row++)
     {
         for(int col = 0; col < b - reminders_y; col++)
@@ -56,6 +56,7 @@ int* cuda_implementation_v2(int* arr, int n, int k, int b, double *elapsed)
         d_A = d_temp;
         d_temp = tmp;
     }
+    cudaThreadSynchronize();
     gettimeofday(&t1, 0);
     *elapsed = (t1.tv_sec-t0.tv_sec)*1000.0 + (t1.tv_usec-t0.tv_usec)/1000.0;
     cudaMemcpy(arr, d_A, length, cudaMemcpyDeviceToHost);
