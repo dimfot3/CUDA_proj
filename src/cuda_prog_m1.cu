@@ -15,12 +15,12 @@ __global__ void kernelm1_v1(int* arr, int* temp, int n, int b)
         reminders_x = orig_x + b - n;
     if(orig_y + b >= n)
         reminders_y = orig_y + b - n;
-    
+    if(orig_x >= n && orig_x >= n)
+        return;
     for(int row = 0; row < b - reminders_x ; row++)
     {
         for(int col = 0; col < b - reminders_y; col++)
         {   
-            // just by inversing i,j we have 200% boostup because of cohealment of memory
             j = orig_x + row;
             i = orig_y + col;
             u_idx = ((i - 1 + n) % n) * n + j;

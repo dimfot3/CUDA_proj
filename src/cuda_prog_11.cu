@@ -30,7 +30,7 @@ int* cuda_implementation_v1(int* arr, int n, int k, double *elapsed)
     int *d_A, *d_temp, *tmp;
     size_t length = n * n * sizeof(int);
     int num_of_blocks_per_dim = ceil((float)n / MAX_THREADS_PER_DIM);
-    int num_of_threads_per_dim = ceil((float)n / num_of_blocks_per_dim);
+    int num_of_threads_per_dim = ceil((float)n / num_of_blocks_per_dim);    //this is done for test purposes and makes nonsense
 
     cudaMalloc(&d_A, length);
     cudaMalloc(&d_temp, length);
