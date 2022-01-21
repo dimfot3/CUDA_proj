@@ -20,41 +20,44 @@ __global__ void kernelm1_shared(int* arr, int* temp, int n, int b)
         return;
     int shared_arr_dim = b * blockDim.x;
     extern __shared__ int shared_arr[];
-    for(int row = 0; row < b - reminders_x ; row++)
+    for(int row = 0; row < b - reminders_x; row++)
     {
         for(int col = 0; col < b - reminders_y; col++)
-        {   
+        {
             i = orig_x + row;
             j = orig_y + col;
-            i_s = threadIdx.x * b + row;
-            j_s = threadIdx.y * b + col;
+            i_s = threadIdx.x * b + row + 1;
+            j_s = threadIdx.y * b + col + 1;
             if(i >= n || j >= n)
                 break;
-            shared_arr[i_s * blockDim.x * b + j_s] = arr[i * n + j];
+            shared_arr[i_s * blockDim.x * (b+2) + j_s] = arr[i * n + j];
         }   
     }
+    if(threadIdx.x == 0)
+        shared_arr[i_s * blockDim.x * (b+2) + j_s] = arr[i * n + j];
+    else if (threadIdx.x == blockIdx.x - 1)
+        shared_arr[i_s * blockDim.x * (b+2) + j_s] = arr[i * n + j];
+    else if (threadIdx.y == 0)
+        shared_arr[i_s * blockDim.x * (b+2) + j_s] = arr[i * n + j];
+    else if (threadIdx.y == blockIdx.y - 1)
+        shared_arr[i_s * blockDim.x * (b+2) + j_s] = arr[i * n + j];
+    
+    
     __syncthreads();
-    int temp_val = 0;
     for(int row = 0; row < b - reminders_x ; row++)
     {
         for(int col = 0; col < b - reminders_y; col++)
         {   
-            // just by inversing i,j we have 200% boostup because of cohealment of memory
+            printf("OK");
             i = orig_x + row;
             j = orig_y + col;
-            i_s = threadIdx.x * b + row;
-            j_s = threadIdx.y * b + col;
-            u_idx = ((i - 1 + n) % n) * n + j;
-            lo_idx = ((i + 1) % n ) * n + j;
-            lf_idx = n * i + (j - 1 + n) % n;
-            r_idx = n * i + (j + 1) % n;
-            temp_val += shared_arr[i_s * blockDim.x * b + j_s];
-            temp_val += i_s <= 0 ? arr[u_idx] : shared_arr[(i_s - 1) * blockDim.x * b + j_s];
-            temp_val += i_s >= shared_arr_dim - 1 || (i+1) % n == 0? arr[lo_idx] : shared_arr[(i_s + 1) * blockDim.x * b + j_s];
-            temp_val += j_s == 0 ? arr[lf_idx] : shared_arr[i_s * blockDim.x * b + j_s - 1];
-            temp_val += j_s >= shared_arr_dim - 1 || (j+1) % n == 0 ? arr[r_idx] : shared_arr[i_s * blockDim.x * b + j_s + 1];
-            temp[i * n + j] = temp_val > 0 ? 1 : -1;
-            temp_val = 0;
+            i_s = threadIdx.x * b + row + 1;
+            j_s = threadIdx.y * b + col + 1;
+            u_idx = ((i_s - 1 + blockIdx.x) % blockIdx.x) * blockIdx.x + j_s;
+            lo_idx = ((i_s + 1) % blockIdx.x ) * blockIdx.x + j_s;
+            lf_idx = blockIdx.y * i_s + (j_s - 1 + blockIdx.y) % blockIdx.y;
+            r_idx = blockIdx.y * i_s + (j_s + 1) % blockIdx.y;
+            temp[i * n + j] = (shared_arr[i_s * n + j_s] + shared_arr[u_idx] + shared_arr[lo_idx] +  shared_arr[r_idx] + shared_arr[lf_idx]) > 0 ? 1 : -1;
         }
     }
 }
@@ -64,14 +67,14 @@ int* cuda_implementation_v3(int* arr, int n, int k, int b, double *elapsed)
     struct timeval t0, t1;
     int *d_A, *d_temp, *tmp;
     size_t length = n * n * sizeof(int);
-    int chunks_per_dim, num_of_blocks_per_dim, num_of_threads_per_dim, shared_memory=100000000;
+    int chunks_per_dim, num_of_blocks_per_dim, num_of_threads_per_dim, shared_memory=MAX_SHARED+1;
     int max_thread_per_dim = 32;
     while(shared_memory > MAX_SHARED)
     {
         chunks_per_dim = ceil((float)n / b);
         num_of_blocks_per_dim = ceil((float)chunks_per_dim / max_thread_per_dim--);
         num_of_threads_per_dim = ceil((float)chunks_per_dim / num_of_blocks_per_dim);
-        shared_memory = num_of_threads_per_dim*num_of_threads_per_dim*b*b*sizeof(int);
+        shared_memory = (num_of_threads_per_dim*num_of_threads_per_dim*b*b + 4*(b+1)*b*num_of_threads_per_dim*num_of_threads_per_dim)*sizeof(int);
     }
     if(shared_memory > MAX_SHARED || num_of_blocks_per_dim < 0 || num_of_threads_per_dim < 0)
     {
