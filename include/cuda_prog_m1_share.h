@@ -8,13 +8,22 @@
 #define _CUDAM1_SHARE_H
 
 /**
- * @brief this is the cuda one thread per element kernel
+ * @brief this is the cuda implementation v3 with shared memory and boarders of block are loaded in memory
  * 
  * @param arr the pointer to device memory
  * @param temp the temporary array where the new state will be saved
  * @return void
  **/
 __global__ void kernelm1_shared(int* arr, int* temp, int n, int b);
+
+/**
+ * @brief this is the cuda implementation v3 with shared memory but borders are not loaded in shared memory
+ * 
+ * @param arr the pointer to device memory
+ * @param temp the temporary array where the new state will be saved
+ * @return void
+ **/
+__global__ void kernelm1_shared_v2(int* arr, int* temp, int n, int b);
 
 /**
  * @brief this is the cuda v2 implementation of multiple elements per thread
