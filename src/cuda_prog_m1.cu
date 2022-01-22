@@ -15,7 +15,7 @@ __global__ void kernelm1_v1(int* arr, int* temp, int n, int b)
         reminders_x = orig_x + b - n;
     if(orig_y + b >= n)
         reminders_y = orig_y + b - n;
-    if(orig_x >= n && orig_x >= n)
+    if(orig_x >= n || orig_x >= n)
         return;
     for(int row = 0; row < b - reminders_x ; row++)
     {
