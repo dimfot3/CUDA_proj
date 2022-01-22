@@ -12,6 +12,7 @@
  * 
  * @param arr the pointer to device memory
  * @param temp the temporary array where the new state will be saved
+ * @param n the matrix's dimension
  * @return void
  **/
 __global__ void kernel11(int* arr, int* temp, int n);

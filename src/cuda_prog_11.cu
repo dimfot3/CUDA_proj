@@ -11,9 +11,7 @@ __global__ void kernel11(int* arr, int* temp, int n)
     int orig_y = blockIdx.y * blockDim.y + threadIdx.y;
     // these reminders are used when block some reminders threads exists because of unperfect division
     int reminders_x = 0, reminders_y = 0;
-    if(orig_x>= n)
-        return;
-    if(orig_y>= n)
+    if(orig_x>= n || orig_y>= n)
         return;
     j = orig_x;
     i = orig_y;
