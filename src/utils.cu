@@ -117,11 +117,11 @@ void save_res(int mode, int n, int k, int b, double process_time, double total_t
 {
     FILE *fp;
     int file_exists;
-    if( access("results.txt", F_OK ) == 0 )
+    if( access("results.csv", F_OK ) == 0 )
         file_exists = 1;
-    fp = fopen("results.txt", "a+");
+    fp = fopen("results.csv", "a+");
     if(file_exists!=1)
-        fprintf(fp, "mode, n, k, b, process_time, total_time\n", mode, n, k, b, process_time, total_time);
+        fprintf(fp, "mode,n,k,b,process_time,total_time\n", mode, n, k, b, process_time, total_time);
     fprintf(fp, "%d,%d,%d,%d,%lf,%lf\n", mode, n, k, b, process_time, total_time);
     fclose(fp);
 }
