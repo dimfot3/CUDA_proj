@@ -9,7 +9,7 @@ df = pd.read_csv('results.csv')
 df2 = pd.read_csv('results2.csv')
 
 #dimension effect vs sequential
-
+"""
 seq_time = np.mean(np.array(df.loc[df['mode'] == 0, 'total_time']).reshape(-1,10), axis=1)
 seq_n = np.array(df.loc[df['mode'] == 0, 'n'].unique())
 v1_time = np.mean(np.array(df.loc[df['mode'] == 1, 'total_time']).reshape(-1,10), axis=1)
@@ -27,7 +27,7 @@ plt.ylabel("Execution time(ms)", fontsize=16)
 plt.legend(fontsize=16)
 plt.title('Sequential vs cuda implemenations in different dimensions', fontsize=20)
 plt.show()
-
+"""
 #all comparison bar
 """
 plt.title('Comparison of all implemenations (Matrix dimensions 5000x5000)', fontsize=20)
@@ -61,13 +61,14 @@ plt.legend(fontsize=18)
 plt.title('Cuda implementations comparison for different dimensions', fontsize=20)
 plt.show()
 """
-#block search plots
 """
+#block search plots
+df2 = pd.read_csv('b_best_v3.txt')
 v2_time = np.mean(np.array(df.loc[df['mode'] == 2, 'process_time']).reshape(-1,10), axis=1)
 v2_b = np.array(df.loc[df['mode'] == 2, 'b'].unique())
 plt.plot(v2_b, v2_time, label='Cuda v2')
-v3_time = np.mean(np.array(df.loc[df['mode'] == 3, 'process_time']).reshape(-1,10), axis=1)
-v3_b = np.array(df.loc[df['mode'] == 3, 'b'].unique())
+v3_time = np.mean(np.array(df2.loc[df2['mode'] == 3, 'process_time']).reshape(-1,10), axis=1)
+v3_b = np.array(df2.loc[df2['mode'] == 3, 'b'].unique())
 plt.plot(v3_b, v3_time, label='Cuda v3')
 plt.xlabel('block size', fontsize=16)
 plt.ylabel('Execution time(ms)', fontsize=16)
