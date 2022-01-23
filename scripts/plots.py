@@ -4,12 +4,12 @@ import matplotlib.pyplot as plt
 
 
 
-
+"""
 df = pd.read_csv('results.csv')
 df2 = pd.read_csv('results2.csv')
 df3 = pd.read_csv('over_flow.csv')
 #dimension effect vs sequential
-"""
+
 seq_time = np.mean(np.array(df.loc[df['mode'] == 0, 'total_time']).reshape(-1,10), axis=1)
 seq_n = np.array(df.loc[df['mode'] == 0, 'n'].unique())
 v1_time = np.mean(np.array(df.loc[df['mode'] == 1, 'total_time']).reshape(-1,10), axis=1)
@@ -43,7 +43,7 @@ plt.bar(range(0, 3), [v1_n[5]/v1_time[5], v1_n[5]/v2_time[5], v1_n[5]/v3_time[5]
 plt.xticks(range(0, 3), ['Cuda v1', 'Cuda v2', 'Cuda v3'], fontsize=18)
 plt.show()
 """
-
+"""
 #dimension effect cuda ver
 
 v1_time = np.mean(np.array(df.loc[df['mode'] == 1, 'total_time']).reshape(-1,10), axis=1)
@@ -62,7 +62,7 @@ plt.title('Cuda implementations comparison for different dimensions', fontsize=2
 plt.show()
 
 
-"""
+
 #block search plots
 df2 = pd.read_csv('b_best_v3.txt')
 v2_time = np.mean(np.array(df.loc[df['mode'] == 2, 'process_time']).reshape(-1,10), axis=1)
@@ -129,7 +129,7 @@ plt.legend(fontsize=16)
 plt.title('Comparison of two Cuda v3 impelmentations', fontsize=20)
 plt.show()
 """
-
+"""
 #memory plots
 v2_time1 = np.mean(np.array(df2.loc[df2['mode'] == 2, 'process_time']).reshape(-1,10), axis=1)
 v2_time2 = np.mean(np.array(df2.loc[df2['mode'] == 2, 'total_time']).reshape(-1,10), axis=1)
@@ -139,5 +139,22 @@ plt.plot(v2_n, v2_time1, label='Actual Kernel Execution')
 plt.xlabel("Matrix dimension", fontsize=16)
 plt.ylabel("Time(ms)", fontsize=16)
 plt.title('Memory Transfers vs actual execution', fontsize=20)
+plt.legend(fontsize=16)
+plt.show()
+"""
+df = pd.read_csv('results.csv')
+v1_time = np.mean(np.array(df.loc[df['mode'] == 1, 'process_time']).reshape(-1,10), axis=1)
+v1_n = np.array(df.loc[df['mode'] == 1, 'k'].unique())
+v2_time = np.mean(np.array(df.loc[df['mode'] == 2, 'process_time']).reshape(-1,10), axis=1)
+v2_n = np.array(df.loc[df['mode'] == 2, 'k'].unique())
+v3_time = np.mean(np.array(df.loc[df['mode'] == 3, 'process_time']).reshape(-1,10), axis=1)
+v3_n = np.array(df.loc[df['mode'] == 3, 'k'].unique())
+plt.plot(v3_n, v3_time, label='Cuda v1')
+plt.plot(v2_n, v2_time, label='Cuda v2')
+plt.plot(v1_n, v1_time, label='Cuda v3')
+plt.xlim([0, 50])
+plt.xlabel("k iterations", fontsize=16)
+plt.ylabel("Time(ms)", fontsize=16)
+plt.title('k iterations effect on execution time (matrix dimension 2000x2000)', fontsize=20)
 plt.legend(fontsize=16)
 plt.show()
