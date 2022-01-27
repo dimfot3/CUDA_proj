@@ -25,11 +25,11 @@ CUDA >= 11.1
 In every session after the main program run, there is validation of the correctness with the sequential. If the test fails then an error message is shown. Otherwise 
 the actual process execution time and the total time (included memory transfers) are shown in console. The results are also saved in csv format in build folder in results.csv file.
 Alternativly you can run the scripts that are copied to build folder during step 2 and run benchmark sessions.
-5.(Optional) In order to run some unit tests of basic utilities replace step 2 with ``cmake -DBUILD_TESTING=ON ..`` and repeat step 3. Then run the unit tests with 
+5. (Optional) In order to run some unit tests of basic utilities replace step 2 with ``cmake -DBUILD_TESTING=ON ..`` and repeat step 3. Then run the unit tests with 
 ``make test``.
 ## Testing
 Here testing is really important as we can make ground truth results for our parallel and complex implementations. We can show the correctness of the program by two ways.
-1.  The analytical expression of ising model is not practical to be used. However one energy therem used as explained in report.
+1.  The analytical expression of ising model is not practical to be used. However one energy theorem used as explained in report.
 2.  The second method to increase the trust on code are some Google Tests that test every function used in sequential implementation.
 
 ## Intructions for code reviewers
