@@ -30,6 +30,7 @@ int main(int argc, char** argv)
             gettimeofday(&t0, 0);
             arr = sequential_eval(n, k, arr);
             gettimeofday(&t1, 0);
+            printf("Model evaluated. Validation started...........\n");
             copy_arr = sequential_eval_ver(n, k, copy_arr);
             validation = compare_matrices(arr, copy_arr, n);
             break;
@@ -37,6 +38,7 @@ int main(int argc, char** argv)
             gettimeofday(&t0, 0);
             cuda_implementation_v1(arr, n, k, &process);
             gettimeofday(&t1, 0);
+            printf("Model evaluated. Validation started...........\n");
             copy_arr = sequential_eval_ver(n, k, copy_arr);
             validation = compare_matrices(arr, copy_arr, n);
             break;
@@ -44,6 +46,7 @@ int main(int argc, char** argv)
             gettimeofday(&t0, 0);
             cuda_implementation_v2(arr, n, k, b, &process);
             gettimeofday(&t1, 0);
+            printf("Model evaluated. Validation started...........\n");
             copy_arr = sequential_eval_ver(n, k, copy_arr);
             validation = compare_matrices(arr, copy_arr, n);
             break;
@@ -51,6 +54,7 @@ int main(int argc, char** argv)
             gettimeofday(&t0, 0);
             cuda_implementation_v3(arr, n, k, b, &process);
             gettimeofday(&t1, 0);
+            printf("Model evaluated. Validation started...........\n");
             copy_arr = sequential_eval_ver(n, k, copy_arr);
             validation = compare_matrices(arr, copy_arr, n);
             break;
@@ -62,7 +66,7 @@ int main(int argc, char** argv)
     if(validation == 0)
     {
         save_res(mode, n, k, b, process, elapsed);
-        printf("Model evaluated successfully in %5.3fms (actual process %5.3fms)\n\n", elapsed, process);
+        printf("Model evaluated successfully in %5.3fms\n", elapsed);
     }
     else
         printf("ERROR! Model evaluation failed!\n\n");

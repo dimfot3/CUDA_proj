@@ -53,7 +53,6 @@ int* sequential_eval_ver(int n, int k, int* arr)
         int* tmp_add = arr;
         arr = temp_arr;
         temp_arr = tmp_add;
-
         long new_sum = get_nsum(arr, n);
         if(new_sum < last_sum)
         {
