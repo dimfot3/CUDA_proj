@@ -32,7 +32,7 @@ Here testing is really important as we can make ground truth results for our par
 1.  The analytical expression of ising model is not practical to be used. However one energy theorem used as explained in report.
 2.  The second method to increase the trust on code are some Google Tests that test every function used in sequential implementation.
 
-## Intructions for code reviewers
+## Instructions for code reviewers
 For easing and deep understanding of this project it is recommended to follow the steps with that order:
 1. first read the paper
 2. read the README.md and follow build instructions
